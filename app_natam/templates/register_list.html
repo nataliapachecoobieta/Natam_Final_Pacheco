@@ -1,0 +1,35 @@
+{% extends 'padre.html' %}
+
+{% block contenidoquecambia %}
+
+    <h1> Lista de Registros </h1>     
+
+    <ul>
+
+    
+    {% for register  in  registers %}
+        <li>
+            <a href = " {% url 'detalleRegister' register.id %}">
+            {{register.id}}    {{register.name}} {{register.lastName}}
+        </a>
+        </li>
+        <div style="display:flex ;column-gap: 5px;">
+            
+    
+            <button>
+                <a href="{% url 'eliminarRegister' register.id %}">Eliminar</a>
+            </button>
+
+            <button>
+                <a href="{% url 'actualizarRegiter' register.id %}">Editar</a>
+            </button>
+        </div>
+        
+    {% endfor %}
+        
+    </ul>
+   
+    <a href="{%url 'crearRegister'%}"> Crear Registro</a>
+
+        
+{% endblock contenidoquecambia %}

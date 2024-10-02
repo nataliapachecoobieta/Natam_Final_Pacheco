@@ -1,0 +1,16 @@
+{% extends 'padre.html' %}
+
+{% block contenidoquecambia %}
+
+    <h1> Vista en detalle curso </h1>     
+
+    <h3>Registros: {{register.id}},<br>
+         nombre:  {{register.name}},<br>
+        apellido: {{register.lastName}}<br>
+        rut:  {{register.rut}} <br>
+        email  {{register.email}},
+        phone: {{register.phone}} <br>
+        fecha_nacimiento: {{register.birth_day}} </h3>
+
+
+{% endblock contenidoquecambia %}

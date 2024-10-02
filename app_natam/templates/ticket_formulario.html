@@ -1,0 +1,23 @@
+{% extends 'padre.html' %}
+
+{% block contenidoquecambia %}
+
+<form action="{% url 'ticketFormulario' %}" method="post"> {% csrf_token %}
+    <p>Flight Number : <input type ="text" name ="flight_number"> </p>
+    <p>Passenger Name: <input type ="text" name ="name_passenger"> </p>
+    <p>Passenger Last name: <input type ="text" name ="lastName_passenger"> </p>
+    <p>Flight date <input type ="date" name ="flight_date"> </p>
+    <p>Flight time: <input type ="time" name ="flight_time"> </p>
+    <p>Gate: <input type ="text" name ="gate"> </p>
+    <p>Origen: <input type ="text" name ="origin"> </p>
+    <p>Destianation: <input type ="text" name ="destination"> </p>
+
+
+    <button type="submit">Enviar</button>
+
+
+</form>
+
+
+        
+{% endblock contenidoquecambia %}

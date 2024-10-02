@@ -1,0 +1,26 @@
+{% extends 'padre.html' %}
+
+{% block contenidoquecambia %}
+
+<form action="{% url 'crearRegister' %}" method="post"> {% csrf_token %}
+
+        {{form.as_p}}
+
+    <!-- <p>Name: <input type ="text" name ="name"> </p>
+    <p>Last Name: <input type ="text" name ="lastName"> </p>
+    <p>RUT: <input type ="text" name ="rut"> </p>
+    <p>Email <input type ="text" name ="email"> </p>
+    <p>Phone: <input type ="text" name ="phone"> </p>
+    <p>Birthday: <input type ="text" name ="birth_day"> </p> -->
+
+
+
+ <button type = "submit"> Crear</button>
+    
+</form>
+
+
+
+
+        
+{% endblock contenidoquecambia %}

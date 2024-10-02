@@ -1,0 +1,23 @@
+{% extends 'padre.html' %}
+
+{% block contenidoquecambia %}
+
+<form action="{% url 'eliminarRegister' register.id %}" method="post"> {% csrf_token %}
+
+    
+<p>¿Estas seguro que quieres eliminar este registro?</p>
+
+    <button type="submit"> Confirmar</button> 
+    <a href = "{% url 'listarRegister' %}"> Cancelar </a> 
+
+
+
+
+    
+</form>
+
+
+
+
+        
+{% endblock contenidoquecambia %}
