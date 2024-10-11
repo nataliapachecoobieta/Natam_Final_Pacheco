@@ -2,17 +2,57 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from. models import login,register,Ticket
 from.forms import  TicketFormulario
-from django .contrib.auth.forms import AuthenticationForm
+from django .contrib.auth.forms import AuthenticationForm,UserCreationForm
+from django.contrib.auth import authenticate, login
 
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView,UpdateView,CreateView
-
+from .models import register as RegisterModel  
 
 from django .http import HttpResponse
-# Create your views here.
 
-def nuevo_login(req,username, password ):
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render
+
+# views
+
+class Registerlist(ListView):
+     
+     model = register
+     template_name = 'register_list.html'
+     context_object_name ='registers'
+
+class RegisterDetail (DetailView):
+     
+    model = register
+    template_name = 'register_detail.html'
+    context_object_name ='register'
+
+class RegisterCreate(CreateView):
+     
+    model = register
+    template_name = 'register_create.html'
+    fields= ['name','lastName','rut','email','phone','birth_day']
+    success_url = '/app-natam/Bien'
+
+class RegisterUpdate (UpdateView):
+
+    model = register
+    template_name = 'register_update.html'
+    fields= ('__all__')
+    success_url =  '/app-natam/Bien'
+    context_object_name ='register'
+
+class RegisterDelete(DeleteView):
+     model=register
+     template_name = 'register_delete.html'
+     success_url = '/app-natam/inicio'
+     context_object_name ='register'
+
+
+def nuevo_login(req, username, password ):
 
     nuevo_login = login(username=username ,password =password)
     nuevo_login.save()
@@ -66,17 +106,43 @@ def bien(req):
 
 
 
+
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render
+
 def login_formulario(req):
-    print (req.POST)
+    if req.method == 'POST':
+        # Obtén los datos del formulario
+        username = req.POST.get("username")
+        password = req.POST.get("password")
+
+        # Autentica al usuario
+        user = authenticate(req, username=username, password=password)
+
+        if user:
+            # Si la autenticación es exitosa, inicia sesión
+            login(req, user)
+            # Aquí usas el nombre del usuario que realmente está autenticado
+            return render(req, "inicio.html", {"mensaje": f"Bienvenido {user.username}"})
+        else:
+            # Si la autenticación falla, muestra un mensaje de error específico
+            return render(req, "login_formulario.html", {"mensaje": "Usuario o contraseña incorrectos"})
+    
+    return render(req, "login_formulario.html", {})
+
+
+
+# def login_formulario(req):
+#     print (req.POST)
        
-    if req.method =='POST':
-        nuevo_login = login(username=req.POST["username"], password=req.POST["password"])
-        nuevo_login.save()
+#     if req.method =='POST':
+#         nuevo_login = login(username=req.POST["username"], password=req.POST["password"])
+#         nuevo_login.save()
 
-        return render(req,"bien.html",{})
-    else:
+#         return render(req,"bien.html",{})
+#     else:
 
-       return render (req,"login_formulario.html",{})
+#        return render (req,"login_formulario.html",{})
     
 
 def busqueda_usuario_formulario(req):
@@ -108,12 +174,14 @@ def register_formulario(req):
     print (req.POST)
        
     if req.method =='POST':
-            nuevo_register = register (name=req.POST["name"],  
+            nuevo_register = RegisterModel (
+            name=req.POST["name"],  
             lastName =req.POST["lastName"],
             rut =req.POST["rut"],
             email =req.POST["email"],
             phone =req.POST["phone"],
-            birth_day =req.POST["birth_day"])
+            birth_day =req.POST["birth_day"],
+            )
 
             nuevo_register.save()
 
@@ -227,41 +295,59 @@ def editar_ticket(req, id):
         return render(req, "editar_ticket.html", {"mi_formulario": mi_formulario,"id":ticket.id})
 
 
-class Registerlist(ListView):
-     
-     model = register
-     template_name = 'register_list.html'
-     context_object_name ='registers'
-
-class RegisterDetail (DetailView):
-     
-    model = register
-    template_name = 'register_detail.html'
-    context_object_name ='register'
-
-class RegisterCreate(CreateView):
-     
-    model = register
-    template_name = 'register_create.html'
-    fields= ['name','lastName','rut','email','phone','birth_day']
-    success_url = '/app-natam/Bien'
-
-class RegisterUpdate (UpdateView):
-
-    model = register
-    template_name = 'register_update.html'
-    fields= ('__all__')
-    success_url =  '/app-natam/Bien'
-    context_object_name ='register'
-
-class RegisterDelete(DeleteView):
-     model=register
-     template_name = 'register_delete.html'
-     success_url = '/app-natam/inicio'
-     context_object_name ='register'
 
 
 
+
+# Login view
+def login3(req):
+    if req.method == 'POST':
+        mi_formulario = AuthenticationForm(req, data=req.POST)
+        if mi_formulario.is_valid():
+            data = mi_formulario.cleaned_data
+            usuario = data['username']
+            psw = data['password']
+
+            # Autenticación del usuario
+            user = authenticate(username=usuario, password=psw)
+            if user is not None:  # Se puede verificar que user no sea None
+                login(req, user)  # Aquí solo se pasa req y user
+                return render(req, "inicio.html", {"mensaje": f"Bienvenido {usuario}"})
+            else:
+                return render(req, "inicio.html", {"mensaje": "Datos incorrectos!"})
+        else:
+            return render(req, "login.html", {"mi_formulario": mi_formulario})
+    else:
+        mi_formulario = AuthenticationForm()
+        return render(req, "login.html", {"mi_formulario": mi_formulario})
+
+# Register view
+def register(req):
+    if req.method == 'POST':
+        mi_formulario = UserCreationForm(req.POST)
+        if mi_formulario.is_valid():
+            data = mi_formulario.cleaned_data
+            usuario = data['username']
+            mi_formulario.save()
+
+            RegisterModel.objects.create(
+                name=usuario,  # Aquí estamos usando el nombre de usuario, ajusta según necesites
+                lastName="Pacheco",  # Deberías obtener este valor de un formulario
+                rut="12345678-9",  # Ajusta esto según el formulario
+                email="usuario@ejemplo.com",  # Ajusta esto según el formulario
+                phone="+56 123456789",  # Ajusta esto según el formulario
+                birth_day="2000-01-01"  # Ajusta esto según el formulario
+            )
+
+
+        
+
+            return render(req, "inicio.html", {"mensaje": f"Usuario {usuario} creado exitosamente!"})
+        else:
+            return render(req, "registro.html", {"mi_formulario": mi_formulario})
+    else:
+        mi_formulario = UserCreationForm()
+        return render(req, "registro.html", {"mi_formulario": mi_formulario})
 
 
 

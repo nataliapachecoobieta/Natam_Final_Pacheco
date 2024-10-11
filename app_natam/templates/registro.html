@@ -2,12 +2,11 @@
 
 {% block contenidoquecambia %}
 
-<h2>Login</h2>
-<form method="POST">{% csrf_token %}
-
+<h2>Registro</h2>
+<form method="POST">
+  {% csrf_token %}
   {{ mi_formulario.as_p }}
-  <button type="submit">Login</button>
-</form> 
-
+  <button type="submit">Registrar</button>
+</form>
         
 {% endblock contenidoquecambia %}
