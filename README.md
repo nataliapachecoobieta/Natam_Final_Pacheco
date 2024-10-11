@@ -32,46 +32,4 @@ En Natam , Nos encanta codiar 😊
 
 A continuacion dejo el link del fucionamiento de la pagina https://www.loom.com/share/d2590f28c84f4fc0bad633c991cd3ea4
 
-About
-No description, website, or topics provided.
-Resources
- Readme
- Activity
-Stars
- 0 stars
-Watchers
- 1 watching
-Forks
- 0 forks
-Releases
-No releases published
-Create a new release
-Packages
-No packages published
-Publish your first package
-Languages
-CSS
-88.2%
- 
-Python
-6.4%
- 
-HTML
-5.3%
- 
-JavaScript
-0.1%
-Suggested workflows
-Based on your tech stack
-Python package logo
-Python package
-Create and test a Python package on multiple Python versions.
-Python application logo
-Python application
-Create and test a Python application.
-Publish Python Package logo
-Publish Python Package
-Publish a Python Package to PyPI on release.
-More workflows
-Footer
-© 2024 GitHub, Inc.
+
